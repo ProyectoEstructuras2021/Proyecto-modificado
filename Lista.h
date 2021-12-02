@@ -7,7 +7,7 @@
 
 using namespace std;
 
-
+//NodoL*lista = NULL;
 Nodo*arbol = NULL;
 int memoria, t, t2, tiempopro, memo;
 ArbolBB a;
@@ -63,15 +63,16 @@ class Lista{
 			gotoxy(pos,pos2);cout << "Tarea: " << actual->getNombre().size() <<actual->getNombre()<< endl;
 			gotoxy(pos,pos2+1);cout << "Porcentaje de memoria: " <<actual->getMemoria()<< endl;
 			gotoxy(pos,pos2+2);cout << "Tiempo: "<<actual->getTie2()<<endl;
-			gotoxy(pos,pos2+3);cout << "Tiempo para finalizar tarea: "<<tiempopro<<" minutos"<<endl;
+			gotoxy(pos,pos2+3);cout << "ID: "<<actual->getID()<<endl;
+			gotoxy(pos,pos2+4);cout << "Tiempo para finalizar tarea: "<<tiempopro<<" minutos"<<endl;
 			
 			if(actual->getTie2()==tiempopro){
 				memo=actual->getMemoria();
 				memoria = memoria+memo;
 				a.insertarNodo(arbol,actual->getTie2());
 			}
-				if(tiempopro<=0){
-					eliminar(actual->getID());
+				if(tiempopro==0){
+					eliminar(inicio,actual->getID());
 					memoria=memoria-memo;
 				}
 			
@@ -93,9 +94,26 @@ class Lista{
 		}
 	}
 
-	void eliminar(int id){
+	void eliminar(NodoL *&lista, int id){
 		
-		if(inicio != NULL){
+		NodoL *aux_borrar;
+		NodoL *anterior = NULL;
+		aux_borrar = inicio;
+		
+		while((aux_borrar != NULL) && (aux_borrar->getID() != id)){
+			anterior = aux_borrar;
+			aux_borrar = aux_borrar->siguiente;
+		}
+		
+		if(anterior==NULL){
+			inicio=inicio->siguiente;
+			delete aux_borrar;
+		}else{
+			anterior->siguiente=aux_borrar->siguiente;
+			delete aux_borrar;
+		}
+		
+	/*	if(inicio != NULL){
 		NodoL *aux_borrar;
 		NodoL *anterior = NULL;
 		
@@ -106,19 +124,21 @@ class Lista{
 			aux_borrar = aux_borrar->siguiente;
 		}
 		
-	/*	if(anterior == NULL){
-			inicio = inicio->siguiente;
+		if(anterior == NULL){
+			
+			anterior->siguiente=aux_borrar->siguiente;
 			delete aux_borrar;
 			
 		}
 		else{
-			anterior->siguiente=aux_borrar->siguiente;
-			delete aux_borrar;
+			
+			inicio = inicio->siguiente;
+			delete anterior;
 			
 		}*/
 	}
 		
-	}
+	
 
 
 	bool listaLlena() { 
